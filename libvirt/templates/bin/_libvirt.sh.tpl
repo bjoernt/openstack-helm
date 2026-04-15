@@ -19,9 +19,13 @@ set -ex
 # NOTE(mnaser): This will move the VNC certificates into the expected location.
 if [ -f /tmp/vnc.crt ]; then
   mkdir -p /etc/pki/libvirt-vnc
-  mv /tmp/vnc.key /etc/pki/libvirt-vnc/server-key.pem
-  mv /tmp/vnc.crt /etc/pki/libvirt-vnc/server-cert.pem
-  mv /tmp/vnc-ca.crt /etc/pki/libvirt-vnc/ca-cert.pem
+  cp -f /tmp/vnc.key /etc/pki/libvirt-vnc/server-key.pem
+  cp -f /tmp/vnc.crt /etc/pki/libvirt-vnc/server-cert.pem
+  cp -f /tmp/vnc-ca.crt /etc/pki/libvirt-vnc/ca-cert.pem
+
+  chown -R root:kvm /etc/pki/libvirt-vnc
+  chmod 0750 /etc/pki/libvirt-vnc
+  chmod 0440 /etc/pki/libvirt-vnc/server-key.pem
 fi
 
 if [ -n "$(cat /proc/*/comm 2>/dev/null | grep -w libvirtd)" ]; then
